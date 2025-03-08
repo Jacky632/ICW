@@ -175,7 +175,7 @@ def main():
     M, L, K, F = MLKF_1dof(
         m1, l1, k1, f1
     )
-    # plot(ax, fig, hz, sec, M, L, K, F, 'No Damping: ')
+    plot(ax, fig, hz, sec, M, L, K, F, 'No Damping: ')
 
     # 1 DAMPER -------------
     m2 = 0.15
@@ -189,6 +189,7 @@ def main():
     )
     plot(ax, fig, hz, sec, M, L, K, F, "1 Damper:     ")
 
+    
     # 10 DAMPER --------------
     m_t = 0.15  # total mass
     n = 10  # 10 absorbers
@@ -203,10 +204,11 @@ def main():
     )
     plot(ax, fig, hz, sec, M, L, K, F, "10 Damper:   ")
 
-    # 10 DAMPER --------------
+    
+    # 100 DAMPER --------------
     m_t = 0.15  # total mass
-    n = 10  # 10 absorbers
-    l = 0.85 / n  # individual damping
+    n = 100 # 10 absorbers
+    l = 0.92 / n  # individual damping
     f = 0  # no external force
     o = 3.683  # main frequency to get rid of
     do = 0.8  # variation in tuned frequency
@@ -215,7 +217,7 @@ def main():
         m1, l1, k1, f1,
         m_t, n, o, do, l, f
     )
-    plot(ax, fig, hz, sec, M, L, K, F, "10 Damper, diff l:   ")
+    plot(ax, fig, hz, sec, M, L, K, F, "100 Damper:   ")
 
 
     # Plot results
