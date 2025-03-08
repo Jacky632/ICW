@@ -27,6 +27,37 @@ def MLKF_2dof(m1, l1, k1, f1, m2, l2, k2, f2):
     return M, L, K, F
 
 
+def MLKF_ndof(m1, l1, k1, f1, m_t, n, o, do, l, f):
+
+    """Return mass, damping, stiffness & force matrices for nDOF system"""
+    m = m_t / n
+    M = np.eye(n+1) * m
+    M[0][0] = m1
+
+    L = np.zeros((n+1, n+1))
+    L[0, 0] = l1 + n*l
+    for i in range(1, n+1):
+        L[i, i] = l
+        L[i, 0] = -l
+        L[0, i] = -l
+
+    K = np.zeros((n+1, n+1)) 
+    o_i = o - do/(n-1) * (n//2)
+    sumK = 0
+    for i in range(1, n+1):
+        k_i = (2*np.pi*o_i)**2 * m
+        K[i, i] = k_i
+        K[i, 0] = -k_i
+        K[0, i] = -k_i
+        sumK += k_i
+        o_i += do/(n-1)
+    K[0, 0] = k1 + sumK
+
+    F = np.array([f1] + [f]*n)
+
+    return M, L, K, F
+
+
 def freq_response(w_list, M, L, K, F):
 
     """Return complex frequency response of system"""
@@ -144,7 +175,7 @@ def main():
     M, L, K, F = MLKF_1dof(
         m1, l1, k1, f1
     )
-    plot(ax, fig, hz, sec, M, L, K, F, 'No Damping: ')
+    # plot(ax, fig, hz, sec, M, L, K, F, 'No Damping: ')
 
     # 1 DAMPER -------------
     m2 = 0.15
@@ -160,7 +191,31 @@ def main():
 
     # 10 DAMPER --------------
     m_t = 0.15  # total mass
-    
+    n = 10  # 10 absorbers
+    l = 0.92 / n  # individual damping
+    f = 0  # no external force
+    o = 3.683  # main frequency to get rid of
+    do = 0.8  # variation in tuned frequency
+
+    M, L, K, F = MLKF_ndof(
+        m1, l1, k1, f1,
+        m_t, n, o, do, l, f
+    )
+    plot(ax, fig, hz, sec, M, L, K, F, "10 Damper:   ")
+
+    # 10 DAMPER --------------
+    m_t = 0.15  # total mass
+    n = 10  # 10 absorbers
+    l = 0.85 / n  # individual damping
+    f = 0  # no external force
+    o = 3.683  # main frequency to get rid of
+    do = 0.8  # variation in tuned frequency
+
+    M, L, K, F = MLKF_ndof(
+        m1, l1, k1, f1,
+        m_t, n, o, do, l, f
+    )
+    plot(ax, fig, hz, sec, M, L, K, F, "10 Damper, diff l:   ")
 
 
     # Plot results
