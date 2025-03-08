@@ -189,7 +189,7 @@ def main():
         m1, l1, k1, f1,
         m_t, n, o, do, l, f
     )
-    plot(ax, fig, hz, sec, M, L, K, F, "10 Dampers, Total Mass 0.08 kg: ")
+    plot(ax, fig, hz, sec, M, L, K, F, "10 Dampers, Total Mass 0.4 kg: ")
 
 
     # Plot results
