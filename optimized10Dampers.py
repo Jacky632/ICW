@@ -138,7 +138,7 @@ def plot(ax, fig, hz, sec, M, L, K, F, cap):
 
     # Create plot
     ax[0].plot(hz, f_amplitude, label=f_legends[0])
-    ax[-1].plot(hz, t_response, label=t_legends[0])
+    ax[-1].plot(sec, t_response, label=t_legends[0])
 
 
 def main():
@@ -177,56 +177,29 @@ def main():
     )
     plot(ax, fig, hz, sec, M, L, K, F, 'No Damping: ')
 
-    # 1 DAMPER -------------
-    m2 = 0.15
-    l2 = 0.92
-    k2 = 80.33
-    f2 = 0
-
-    M, L, K, F = MLKF_2dof(
-        m1, l1, k1, f1,
-        m2, l2, k2, f2
-    )
-    plot(ax, fig, hz, sec, M, L, K, F, "1 Damper:     ")
-
-    
     # 10 DAMPER --------------
-    m_t = 0.15  # total mass
+    m_t = 0.4  # total mass
     n = 10  # 10 absorbers
-    l = 0.92 / n  # individual damping
+    l = 0.60 / n  # individual damping
     f = 0  # no external force
     o = 3.683  # main frequency to get rid of
-    do = 0.8  # variation in tuned frequency
 
+    do = 1.55  # variation in tuned frequency
     M, L, K, F = MLKF_ndof(
         m1, l1, k1, f1,
         m_t, n, o, do, l, f
     )
-    plot(ax, fig, hz, sec, M, L, K, F, "10 Damper:   ")
-
-    
-    # 100 DAMPER --------------
-    m_t = 0.15  # total mass
-    n = 100 # 10 absorbers
-    l = 0.92 / n  # individual damping
-    f = 0  # no external force
-    o = 3.683  # main frequency to get rid of
-    do = 0.8  # variation in tuned frequency
-
-    M, L, K, F = MLKF_ndof(
-        m1, l1, k1, f1,
-        m_t, n, o, do, l, f
-    )
-    plot(ax, fig, hz, sec, M, L, K, F, "100 Damper:   ")
+    plot(ax, fig, hz, sec, M, L, K, F, "10 Dampers, Total Mass 0.08 kg: ")
 
 
     # Plot results
 
     fig.canvas.mpl_connect('resize_event', lambda x: fig.tight_layout(pad=2.5))
     ax[0].legend()
-    ax[-1].legend()
+    ax[-1].set_xlim(0, 5)
+    ax[-1].legend(loc="lower right")
     fig.tight_layout()
-    plt.savefig('1.png', dpi=300)
+    plt.savefig('optimized10Dampers.png', dpi=300)
     plt.show()
 
 
